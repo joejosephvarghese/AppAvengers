@@ -8,8 +8,16 @@ export const BlogNoteRepositoryMongoDB = (model) => {
         const newBlogNote = await blogNoteEntity.createBlogNote(blogNote);
         return newBlogNote;
     };
+
+    const findAllNotes = async () => {
+        const allNotes = await blogNoteEntity.getAllNotes();
+        return allNotes;
+      };
+      
+    
     return {
         createBlogNote ,
+        findAllNotes
     
        
     }

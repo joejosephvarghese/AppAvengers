@@ -1,4 +1,4 @@
-import createBlogNote from "../app/repositories/useCases/blog/noteCruds.js";
+import {createBlogNote,findAllNotes} from "../app/repositories/useCases/blog/noteCruds.js";
 import mongoose from 'mongoose';
 
 const { ObjectId } = mongoose.Types;
@@ -9,7 +9,7 @@ const blogNoteController = (
     blogNoteModel
 ) => {
     const dbRepositoryBlogNote = blogNoteDbRepository(blogNoteDbRepositoryImpl(blogNoteModel));
-    console.log(dbRepositoryBlogNote,"jjjj")
+  
   
     const createNewBlogNote = async (req, res, next) => {
         try {
@@ -31,9 +31,21 @@ const blogNoteController = (
             next(error);
         }
     };
+
+    const getAllNotes = async (req, res, next) => {
+        console.log("here")
+        try {
+          const notes = await findAllNotes(dbRepositoryBlogNote);
+          res.json({status: 'success', notes});
+        } catch (error) {
+          next(error);
+        }
+      };
+      
   
     return {
         createNewBlogNote,
+        getAllNotes
     };
 };
   

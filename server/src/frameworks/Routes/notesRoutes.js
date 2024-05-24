@@ -16,10 +16,10 @@ const blogNoteRouter = () => {
         BlogNote
     );
      
-    console.log(controller,"controller got")
-
+   
 
     route.post('/create-note',controller.createNewBlogNote);
+    route.get('/get-note',controller.getAllNotes)
 
     return route;
 };

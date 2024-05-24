@@ -12,5 +12,17 @@ export const createBlogNote = async (blogNote, blogNoteRepository) => {
 };
 
 
+export const findAllNotes = async (blogNoteRepository) => {
+  console.log("here 2")
+  try {
+    const allNotes = await blogNoteRepository.findAllNotes();
+    return allNotes;
+  } catch (error) {
+    throw new Error("Failed to get the notes");
+  }
+};
 
-export default createBlogNote
+
+
+
+// export default createBlogNote
