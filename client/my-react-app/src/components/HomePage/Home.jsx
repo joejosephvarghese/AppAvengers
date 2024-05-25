@@ -1,12 +1,13 @@
 // src/SplitView.js
 import React, { useCallback, useState } from 'react';
 import debounce from 'lodash/debounce';
+import { useSelector, useDispatch } from 'react-redux';
+import { setNotes, updateNote, setError, setLoading } from '../../redux/slice/noteSlice';
 import { saveNote } from '../../apis/notes';
-import { useSelector } from 'react-redux';
 
 const SplitView = () => {
-  const notes = useSelector((s) => s?.notes?.data);
-  console.log(notes, ' this is the notes');
+  const dispatch = useDispatch();
+  const notes = useSelector((state) => state.notes.data);
   const [selectedItem, setSelectedItem] = useState(null);
   const [editedContent, setEditedContent] = useState('');
 
@@ -17,6 +18,7 @@ const SplitView = () => {
   const handleAddNote = () => {
     const newItemId = notes.length + 1;
     const newItem = { id: newItemId, title: `Item ${newItemId}`, content: '' };
+    dispatch(setNotes([...notes, newItem]));
     setSelectedItem(newItem);
     setEditedContent('');
   };
@@ -24,15 +26,24 @@ const SplitView = () => {
   const handleSave = useCallback(
     debounce(async (e) => {
       try {
+        dispatch(setLoading(true));
         await saveNote({
-          id: selectedItem ? selectedItem.id : '1',
-          text: e.target.value,
+          title: selectedItem.title,
+          content: e.target.value,
+          author: 'authorId',
         });
+        dispatch(updateNote({
+          id: selectedItem.id,
+          title: selectedItem.title,
+          content: e.target.value,
+        }));
+        dispatch(setLoading(false));
       } catch (error) {
+        dispatch(setError('Failed to save note'));
         console.error('Failed to save note', error);
       }
     }, 2000),
-    [selectedItem]
+    [selectedItem, dispatch]
   );
 
   return (

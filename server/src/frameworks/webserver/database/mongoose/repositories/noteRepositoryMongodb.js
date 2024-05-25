@@ -13,11 +13,15 @@ export const BlogNoteRepositoryMongoDB = (model) => {
         const allNotes = await blogNoteEntity.getAllNotes();
         return allNotes;
       };
-      
+      const updateNote = async (jobId, updates) => {
+        const updatedJob = await blogNoteEntity.updateBlog(jobId, updates);
+        return updatedJob;
+    }
     
     return {
         createBlogNote ,
-        findAllNotes
+        findAllNotes,
+        updateNote
     
        
     }

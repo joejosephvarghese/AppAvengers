@@ -13,5 +13,5 @@ export const fetchNotes = async () => {
 }
 
 
-export const saveNote = async (payload) => await instance.post(`/notes`, payload);
+export const saveNote = async (payload) => await instance.post(`/notes/create-note`, payload);
 

@@ -17,11 +17,16 @@ export const blogNoteDbRepository = (repository) => {
         }
       };
       
-
+      const updateNote = async (noteId, note) => {
+        const updatedJob = await repository.updateNote(noteId, note);
+        return updatedJob;
+    };
+    
 
     return {
         createBlogNote,
-        findAllNotes
+        findAllNotes,
+        updateNote
        
     }
 }

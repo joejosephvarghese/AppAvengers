@@ -12,6 +12,17 @@ export class BlogNoteEntity {
       const allNotes = await this.model.find();
       return allNotes;
     }
+
+     async updateBlog(blogId, updates) {
+      const existingBlog = await this.model.findById(blogId);
+      if (!existingBlog) {
+        return null;
+      }
+      Object.assign(existingBlog, updates);
+      const updatedBlog = await existingBlog.save();
+      return updatedBlog;
+    }
+    
     
 }
 

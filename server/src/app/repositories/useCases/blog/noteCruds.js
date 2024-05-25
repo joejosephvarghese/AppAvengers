@@ -23,6 +23,21 @@ export const findAllNotes = async (blogNoteRepository) => {
 };
 
 
+export const updateNoteFunction = async (note, noteId, blogNoteRepository) => {
+  try {
+    const updatedNote = await blogNoteRepository.updateNote(noteId, note);
+    return updatedNote;
+  } catch (error) {
+    throw new Error("Failed to update the note");
+  }
+};
+
+
+
+
+
+
+
 
 
 // export default createBlogNote

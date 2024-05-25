@@ -20,6 +20,10 @@ const blogNoteRouter = () => {
 
     route.post('/create-note',controller.createNewBlogNote);
     route.get('/',controller.getAllNotes)
+    route.put('/update-note/:noteId', controller.updateNote);
+
+
+    
 
     return route;
 };

@@ -1,4 +1,4 @@
-import {createBlogNote,findAllNotes} from "../app/repositories/useCases/blog/noteCruds.js";
+import {createBlogNote,findAllNotes,updateNoteFunction} from "../app/repositories/useCases/blog/noteCruds.js";
 import mongoose from 'mongoose';
 
 const { ObjectId } = mongoose.Types;
@@ -41,11 +41,48 @@ const blogNoteController = (
           next(error);
         }
       };
+           
+
+
+
+      const updateNote = async (req, res) => {
+        console.log(req.params)
+        const noteId = req.params.noteId;
       
+        const update = req.body;
+    
+        if (!noteId) {
+            return res.status(400).json({ error: "Note ID is required" });
+        }
+    
+        try {
+            const updatedNote = await updateNoteFunction(update, noteId, dbRepositoryBlogNote);
+            
+            if (!updatedNote) {
+                return res.status(404).json({ error: "Note not found" });
+            }
+    
+            return res.json({
+                status: "success",
+                message: "Note updated successfully",
+                note: updatedNote,
+            });
+        } catch (error) {
+            console.error("Error updating note:", error);
+            return res.status(500).json({ error: "Internal server error" });
+        }
+    };
+      
+    
+    
+  
+    
   
     return {
         createNewBlogNote,
-        getAllNotes
+        getAllNotes,
+        updateNote
+      
     };
 };
   
