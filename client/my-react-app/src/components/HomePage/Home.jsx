@@ -1,26 +1,39 @@
 // src/SplitView.js
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
+import debounce from 'lodash/debounce';
+import { saveNote } from '../../apis/notes';
+import { useSelector } from 'react-redux';
 
 const SplitView = () => {
+  const notes = useSelector((s) => s?.notes?.data);
+  console.log(notes, ' this is the notes');
   const [selectedItem, setSelectedItem] = useState(null);
   const [editedContent, setEditedContent] = useState('');
-  const [items, setItems] = useState([
-    { id: 1, title: 'Item 1', content: 'This is the content of Item 1' },
-    { id: 2, title: 'Item 2', content: 'This is the content of Item 2' },
-    { id: 3, title: 'Item 3', content: 'This is the content of Item 3' },
-  ]);
 
   const handleContentChange = (event) => {
     setEditedContent(event.target.value);
   };
 
   const handleAddNote = () => {
-    const newItemId = items.length + 1;
+    const newItemId = notes.length + 1;
     const newItem = { id: newItemId, title: `Item ${newItemId}`, content: '' };
-    setItems([...items, newItem]);
     setSelectedItem(newItem);
     setEditedContent('');
   };
+
+  const handleSave = useCallback(
+    debounce(async (e) => {
+      try {
+        await saveNote({
+          id: selectedItem ? selectedItem.id : '1',
+          text: e.target.value,
+        });
+      } catch (error) {
+        console.error('Failed to save note', error);
+      }
+    }, 2000),
+    [selectedItem]
+  );
 
   return (
     <div className="flex h-screen">
@@ -29,15 +42,18 @@ const SplitView = () => {
           + Add Note
         </button>
         <ul className="list-none p-0">
-          {items.map((item) => (
+          {notes.map((note) => (
             <li
-              key={item.id}
-              onClick={() => setSelectedItem(item)}
+              key={note.id}
+              onClick={() => {
+                setSelectedItem(note);
+                setEditedContent(note.content);
+              }}
               className={`p-4 cursor-pointer ${
-                selectedItem && selectedItem.id === item.id ? 'bg-gray-200' : 'bg-white'
+                selectedItem && selectedItem.id === note.id ? 'bg-gray-200' : 'bg-white'
               }`}
             >
-              {item.title}
+              {note.title}
             </li>
           ))}
         </ul>
@@ -48,7 +64,10 @@ const SplitView = () => {
             <h2>{selectedItem.title}</h2>
             <textarea
               value={editedContent}
-              onChange={handleContentChange}
+              onChange={(e) => {
+                setEditedContent(e.target.value);
+                handleSave(e);
+              }}
               placeholder="Enter your content here..."
               className="w-full h-64 p-2 border border-gray-300 rounded"
             />

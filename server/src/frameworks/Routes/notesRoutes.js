@@ -19,7 +19,7 @@ const blogNoteRouter = () => {
    
 
     route.post('/create-note',controller.createNewBlogNote);
-    route.get('/get-note',controller.getAllNotes)
+    route.get('/',controller.getAllNotes)
 
     return route;
 };
