@@ -3,7 +3,7 @@ import React, { useCallback, useState } from 'react';
 import debounce from 'lodash/debounce';
 import { useSelector, useDispatch } from 'react-redux';
 import { setNotes, updateNote, setError, setLoading } from '../../redux/slice/noteSlice';
-import { saveNote } from '../../apis/notes';
+import { saveNote,updateNoteAPI } from '../../apis/notes';
 
 const SplitView = () => {
   const dispatch = useDispatch();
@@ -11,9 +11,8 @@ const SplitView = () => {
   const [selectedItem, setSelectedItem] = useState(null);
   const [editedContent, setEditedContent] = useState('');
 
-  const handleContentChange = (event) => {
-    setEditedContent(event.target.value);
-  };
+
+
 
   const handleAddNote = () => {
     const newItemId = notes.length + 1;
@@ -27,16 +26,27 @@ const SplitView = () => {
     debounce(async (e) => {
       try {
         dispatch(setLoading(true));
-        await saveNote({
-          title: selectedItem.title,
-          content: e.target.value,
-          author: 'authorId',
-        });
-        dispatch(updateNote({
-          id: selectedItem.id,
-          title: selectedItem.title,
-          content: e.target.value,
-        }));
+
+        
+    
+        if (selectedItem?._id) {
+          
+          // If the note exists, update it
+          await updateNoteAPI({
+            id: selectedItem._id,
+            title: selectedItem.title,
+            content: e.target.value,
+            author: 'authorId',
+          });
+        } else {
+          // If the note doesn't exist, save it as a new note
+          await saveNote({
+            title: selectedItem.title,
+            content: e.target.value,
+            author: 'authorId',
+          });
+        }
+  
         dispatch(setLoading(false));
       } catch (error) {
         dispatch(setError('Failed to save note'));
@@ -77,6 +87,10 @@ const SplitView = () => {
               value={editedContent}
               onChange={(e) => {
                 setEditedContent(e.target.value);
+                dispatch(updateNote({
+                  ...selectedItem,
+                  content: editedContent
+                }));
                 handleSave(e);
               }}
               placeholder="Enter your content here..."

@@ -15,3 +15,9 @@ export const fetchNotes = async () => {
 
 export const saveNote = async (payload) => await instance.post(`/notes/create-note`, payload);
 
+export const  updateNoteAPI = async (payload) => await instance.put(`/notes/update-note/${payload.id}`,{
+  
+    content: payload.content
+  
+    // Add other properties if needed
+  });

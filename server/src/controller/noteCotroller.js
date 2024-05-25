@@ -15,6 +15,7 @@ const blogNoteController = (
         try {
             const customReq = req;
             const blogNote = req.body;
+            console.log(blogNote)
             const authorId = new ObjectId(customReq.payload);
             blogNote.author = authorId;
             const createdBlogNote = await createBlogNote(blogNote, dbRepositoryBlogNote);
@@ -46,10 +47,12 @@ const blogNoteController = (
 
 
       const updateNote = async (req, res) => {
-        console.log(req.params)
+        console.log(req.params,"jjj")
         const noteId = req.params.noteId;
       
         const update = req.body;
+        
+       console.log(update,"opp");
     
         if (!noteId) {
             return res.status(400).json({ error: "Note ID is required" });
