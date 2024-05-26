@@ -21,3 +21,4 @@ export const  updateNoteAPI = async (payload) => await instance.put(`/notes/upda
   
     // Add other properties if needed
   });
+  export const  deleteNoteAPI = async (payload) => await instance.delete(`/notes/delete-note/${payload.id}`);

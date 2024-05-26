@@ -78,26 +78,30 @@ const blogNoteController = (
       
 
     const deleteTheNote = async (req, res, next) => {
-   
-
-        try {
-          const noteId = req.params.id;
-         
-          console.log(noteId,"controllers")
-          if (!noteId) {
-            return next(new AppError("Note id is required", HttpStatus.BAD_REQUEST));
-          }
-      
-          await deleteNote(noteId, dbRepositoryBlogNote);
-      
-          res.json({
-            status: "success",
-            message: "Note deleted successfully",
+      try {
+        console.log(req.params)
+        const noteId = req.params.id;
+        
+        console.log(noteId, "controllers");
+        
+        if (!noteId) {
+          return res.status(400).json({
+            status: "fail",
+            message: "Note id is required",
           });
-        } catch (error) {
-          next(error);
         }
-      };
+        
+        await deleteNote(noteId, dbRepositoryBlogNote);
+        
+        res.json({
+          status: "success",
+          message: "Note deleted successfully",
+        });
+      } catch (error) {
+        next(error);
+      }
+    };
+    
       
     
     
