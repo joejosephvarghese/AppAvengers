@@ -23,10 +23,21 @@ export const blogNoteDbRepository = (repository) => {
     };
     
 
+    const deleteNote = async (noteId) => {
+
+      try {
+        await repository.deleteNote(noteId);
+      } catch (error) {
+        throw new Error("Failed to delete the note");
+      }
+    };
+    
+
     return {
         createBlogNote,
         findAllNotes,
-        updateNote
+        updateNote,
+        deleteNote
        
     }
 }

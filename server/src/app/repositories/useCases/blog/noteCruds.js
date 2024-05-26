@@ -35,6 +35,18 @@ export const updateNoteFunction = async (note, noteId, blogNoteRepository) => {
 
 
 
+export const deleteNote = async (noteId,blogNoteRepository) => {
+  
+ 
+  try {
+    await blogNoteRepository.deleteNote(noteId);
+  } catch (error) {
+    throw new Error("Failed to delete the note");
+  }
+};
+
+
+
 
 
 

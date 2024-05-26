@@ -82,7 +82,7 @@ const SplitView = () => {
       <div className="w-2/3 p-4">
         {selectedItem ? (
           <div>
-            <h2>{selectedItem.title}</h2>
+            <h2 className='text-blue-500 text-500 text-2xl font-bold'>{selectedItem.title}</h2>
             <textarea
               value={editedContent}
               onChange={(e) => {
@@ -98,7 +98,7 @@ const SplitView = () => {
             />
           </div>
         ) : (
-          <div>Select an item to see the details</div>
+          <div text-gray-500 text-xl font-semibold>Select an item to see the details</div>
         )}
       </div>
     </div>

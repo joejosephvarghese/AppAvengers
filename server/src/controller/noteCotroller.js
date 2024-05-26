@@ -1,4 +1,4 @@
-import {createBlogNote,findAllNotes,updateNoteFunction} from "../app/repositories/useCases/blog/noteCruds.js";
+import {createBlogNote,findAllNotes,updateNoteFunction,deleteNote} from "../app/repositories/useCases/blog/noteCruds.js";
 import mongoose from 'mongoose';
 
 const { ObjectId } = mongoose.Types;
@@ -76,6 +76,29 @@ const blogNoteController = (
         }
     };
       
+
+    const deleteTheNote = async (req, res, next) => {
+   
+
+        try {
+          const noteId = req.params.id;
+         
+          console.log(noteId,"controllers")
+          if (!noteId) {
+            return next(new AppError("Note id is required", HttpStatus.BAD_REQUEST));
+          }
+      
+          await deleteNote(noteId, dbRepositoryBlogNote);
+      
+          res.json({
+            status: "success",
+            message: "Note deleted successfully",
+          });
+        } catch (error) {
+          next(error);
+        }
+      };
+      
     
     
   
@@ -84,7 +107,8 @@ const blogNoteController = (
     return {
         createNewBlogNote,
         getAllNotes,
-        updateNote
+        updateNote,
+        deleteTheNote
       
     };
 };

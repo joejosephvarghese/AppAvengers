@@ -21,6 +21,7 @@ const blogNoteRouter = () => {
     route.post('/create-note',controller.createNewBlogNote);
     route.get('/',controller.getAllNotes)
     route.put('/update-note/:noteId', controller.updateNote);
+    route.delete('/delete-note/:id',controller.deleteTheNote);
 
 
     

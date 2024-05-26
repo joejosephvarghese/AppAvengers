@@ -17,11 +17,19 @@ export const BlogNoteRepositoryMongoDB = (model) => {
         const updatedJob = await blogNoteEntity.updateBlog(jobId, updates);
         return updatedJob;
     }
+
+
+    const deleteNote = async (noteId) => {
+  
+        await  blogNoteEntity.deleteBlog(noteId);
+      };
+      
     
     return {
         createBlogNote ,
         findAllNotes,
-        updateNote
+        updateNote,
+        deleteNote
     
        
     }

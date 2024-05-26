@@ -23,6 +23,13 @@ export class BlogNoteEntity {
       return updatedBlog;
     }
     
+     async deleteBlog(noteId) {
+
+      const note = await this.model.findById(noteId);
+      if (!note) throw new Error("Note not found");
+      await this.model.findByIdAndDelete(noteId);
+    }
+    
     
 }
 
